@@ -27,7 +27,7 @@
   "scripts": {
     "build": "del dist && jiti ./build.ts && tsc",
     "test": "jiti tests/index.spec.ts",
-    "prepublishOnly": "pnpm test && package-check"
+    "prepublishOnly": "pnpm build && pnpm test && package-check"
   },
   "keywords": [
     "lz-string"
