@@ -1,6 +1,6 @@
 {
   "name": "@amoutonbrady/lz-string",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Modern port of LZ-String",
   "sideEffects": false,
   "main": "dist/cjs/index.js",
