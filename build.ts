@@ -8,7 +8,7 @@ build({
   format: 'esm',
   target: 'esnext',
   platform: 'neutral',
-  outfile: 'index.mjs',
+  outExtension: { '.js': '.mjs' },
   treeShaking: true,
 });
 
