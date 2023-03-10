@@ -8,6 +8,7 @@
   "browser": "dist/esm/index.js",
   "unpkg": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
+  "type": "module",
   "private": false,
   "repository": {
     "type": "git",
