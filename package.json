@@ -1,47 +1,71 @@
 {
   "name": "@amoutonbrady/lz-string",
   "version": "0.1.0",
-  "description": "Modern port of LZ-String",
-  "sideEffects": false,
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "browser": "dist/esm/index.js",
-  "unpkg": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "description": "Modern TypeScript port of lz-string: LZ-based compression for JavaScript strings",
   "type": "module",
-  "private": false,
+  "sideEffects": false,
+  "license": "MIT",
+  "author": "Alexandre Mouton-Brady",
   "repository": {
     "type": "git",
-    "url": "https://github.com/amoutonbrady/lz-string.git"
+    "url": "git+https://github.com/amoutonbrady/lz-string.git"
   },
+  "homepage": "https://github.com/amoutonbrady/lz-string#readme",
+  "bugs": "https://github.com/amoutonbrady/lz-string/issues",
+  "keywords": [
+    "lz-string",
+    "lz",
+    "compression",
+    "compress",
+    "decompress",
+    "base64",
+    "utf16",
+    "uint8array",
+    "typescript"
+  ],
   "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js",
-    "browser": "./dist/esm/index.js"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
   },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@12.3.4",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
-    "build": "del dist && jiti ./build.ts && tsc",
-    "test": "jiti tests/index.spec.ts",
-    "prepublishOnly": "pnpm build && pnpm test && package-check"
+    "build": "tsdown",
+    "test": "node --test \"tests/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "pnpm typecheck && pnpm test && pnpm build",
+    "prepublishOnly": "pnpm check"
   },
-  "keywords": [
-    "lz-string"
-  ],
-  "author": "Alexandre Mouton-Brady",
-  "license": "MIT",
   "devDependencies": {
-    "@skypack/package-check": "^0.2.2",
-    "del-cli": "^5.0.0",
-    "esbuild": "^0.17.11",
-    "jiti": "^1.17.2",
-    "prettier": "^2.8.4",
-    "typescript": "5.0.0-beta",
-    "uvu": "^0.5.6"
+    "@arethetypeswrong/core": "^0.18.5",
+    "@types/node": "^26.4.1",
+    "lz-string": "^1.5.0",
+    "prettier": "^3.9.6",
+    "publint": "^0.3.24",
+    "tsdown": "^0.23.0",
+    "typescript": "^7.0.2"
   }
 }

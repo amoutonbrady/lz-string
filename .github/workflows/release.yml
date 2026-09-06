@@ -1,0 +1,30 @@
+# Publishes to npm when a `v*` tag is pushed, using npm trusted publishing
+# (OIDC): no NPM_TOKEN secret needed. One-time setup on npmjs.com:
+# package settings → Trusted Publishing → GitHub Actions, repository
+# `amoutonbrady/lz-string`, workflow `release.yml`.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 26
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm >= 11.5
+      - run: npm install -g npm@latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: npm publish

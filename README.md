@@ -1,47 +1,55 @@
 # @amoutonbrady/lz-string
 
-This is a modern port of the original [lz-string](https://github.com/pieroxy/lz-string).
+Modern TypeScript port of [lz-string](https://github.com/pieroxy/lz-string), the LZ-based
+compression algorithm for JavaScript strings.
 
-## What does modern means?
-
-The project was not really supported and maintained anymore.
-
-I rewrote it in modern javascript syntax, typescript, compiled it with [esbuild](https://esbuild.github.io/) and wrote tests with [uvu](https://github.com/lukeed/uvu).
-
-The size is much smaller and it play nicer with modern bundlers.
+- Wire-compatible with lz-string 1.x: anything compressed by one decompresses with the other
+  (verified against the reference implementation in the test suite).
+- Same API, fully typed, ESM and CommonJS builds, zero dependencies, tree-shakeable.
+- About half the source of the original: the bit reader/writer is shared instead of copy-pasted.
 
 ## Install
 
 ```bash
-$ npm install @amoutonbrady/lz-string
+pnpm add @amoutonbrady/lz-string
 ```
 
-## Example
+## Usage
 
-```js
-import { compress, decompress } from '@amoutonbrady/lz-string'
+```ts
+import { compressToURL, decompressFromURL } from '@amoutonbrady/lz-string';
 
-const compressed = compress('hello world')
-const decompressed = decompress(compressed)
+const compressed = compressToURL('hello world'); // safe to put in a query string as-is
+const original = decompressFromURL(compressed); // 'hello world'
 ```
 
 ## API
 
-The API is the same as [lz-string](https://github.com/pieroxy/lz-string), minus a few methods that needs re-implementations:
+Every `compress*` function returns `''` for `null`/`undefined`. Every `decompress*` function
+returns `''` for `null`/`undefined`, `null` for an empty or corrupt input.
 
-* compressToUTF16(input: string): string;
-* decompressFromUTF16(compressed: string): string;
-* compressToUint8Array(uncompressed: string): Uint8Array;
-* decompressFromUint8Array(compressed: Uint8Array): string;
+| Compress                                          | Decompress                                                    | Output                                                        |
+| ------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------- |
+| `compress(input: string): string`                 | `decompress(input: string): string \| null`                   | Raw UTF-16 code units, smallest but not safe to store as text |
+| `compressToUTF16(input: string): string`          | `decompressFromUTF16(input: string): string \| null`          | Valid UTF-16, safe for `localStorage`                         |
+| `compressToBase64(input: string): string`         | `decompressFromBase64(input: string): string \| null`         | Standard Base64                                               |
+| `compressToURL(input: string): string`            | `decompressFromURL(input: string): string \| null`            | URL-safe alphabet (`+-$`), no padding, no encoding needed     |
+| `compressToUint8Array(input: string): Uint8Array` | `decompressFromUint8Array(input: Uint8Array): string \| null` | Binary                                                        |
 
-### compressToBase64(input: string): string;
+`compressToURL` was named `compressToEncodedURIComponent` in the original library.
 
-### decompressFromBase64(input: string): string | null;
+## Development
 
-### compressToURL(input: string): string;
+```bash
+pnpm install
+pnpm test       # node:test, runs the TypeScript sources directly
+pnpm typecheck
+pnpm build      # tsdown: ESM + CJS + .d.ts, then publint + arethetypeswrong
+```
 
-### decompressFromURL(input: string): string | null;
+Releases: bump the version, push a `v*` tag. The `release.yml` workflow builds, tests and
+publishes to npm with provenance through npm trusted publishing (no token to manage).
 
-### compress(uncompressed: string): string;
+## License
 
-### decompress(compressed: null | string): string | null;
+MIT

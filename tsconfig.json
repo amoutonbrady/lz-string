@@ -1,14 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2022",
+    "lib": ["ES2022"],
     "module": "ESNext",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "types": ["node"],
     "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "isolatedModules": true,
     "declaration": true,
-    "declarationDir": "dist/types",
-    "emitDeclarationOnly": true
+    "isolatedDeclarations": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "skipLibCheck": true
   },
-  "include": ["src/index.ts"]
+  "include": ["src", "tests"]
 }
