@@ -1,6 +1,6 @@
 {
   "name": "@amoutonbrady/lz-string",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Modern TypeScript port of lz-string: LZ-based compression for JavaScript strings",
   "type": "module",
   "sideEffects": false,
